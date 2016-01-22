@@ -14,6 +14,7 @@ class MyStorage(FileSystemStorage):
         for x in dirs:
             if x.endswith('.d'):
                 filenames.append(x[:-2])
+                dirs.remove(x)
 
         return dirs, filenames
 
