@@ -9,3 +9,5 @@ django-staticfiles-dotd
 
 
 Doesn't work with ``collectstatic [..] --link``.
+
+You probably want to use ``django-pipeline`` over this.
