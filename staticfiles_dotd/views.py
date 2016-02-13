@@ -11,6 +11,9 @@ from django.views.static import was_modified_since
 from django.contrib.staticfiles import finders
 from django.utils.six.moves.urllib.parse import unquote
 
+from . import app_settings
+from .utils import get_dotted_path
+
 
 def serve(request, path, insecure=False, **kwargs):
     """
@@ -59,10 +62,8 @@ def served(request, absolute_path):
     ):
         return HttpResponseNotModified(content_type=mimetype)
 
-    contents = ""
-    for filename in sorted(filenames):
-        with open(filename) as f:
-            contents += f.read()
+    fn = get_dotted_path(app_settings.RENDER_FN)
+    contents = ''.join(fn(x) for x in sorted(filenames))
 
     response = HttpResponse(contents, content_type=mimetype)
     response['Last-Modified'] = http_date(latest)

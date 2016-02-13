@@ -6,8 +6,15 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib.staticfiles import views
 from django.contrib.staticfiles.finders import FileSystemFinder
 
+from . import app_settings
+from .utils import get_dotted_path
+
 
 class DotdStorage(FileSystemStorage):
+    def __init__(self, *args, **kwargs):
+        super(DotdStorage, self).__init__(*args, **kwargs)
+
+        self.render = get_dotted_path(app_settings.RENDER_FN)
 
     def listdir(self, path):
         dirs, filenames = super(DotdStorage, self).listdir(path)
@@ -32,12 +39,7 @@ class DotdStorage(FileSystemStorage):
                     continue
                 filenames.append(filename)
 
-        contents = ''
-        for filename in sorted(filenames):
-            with open(filename) as f:
-                contents += f.read()
-
-        return ContentFile(contents)
+        return ContentFile(''.join(self.render(x) for x in sorted(filenames)))
 
 class DotDFinder(FileSystemFinder):
     def __init__(self, *args, **kwargs):
