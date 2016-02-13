@@ -7,9 +7,10 @@ from django.contrib.staticfiles import views
 from django.contrib.staticfiles.finders import FileSystemFinder
 
 
-class MyStorage(FileSystemStorage):
+class DotdStorage(FileSystemStorage):
+
     def listdir(self, path):
-        dirs, filenames = super(MyStorage, self).listdir(path)
+        dirs, filenames = super(DotdStorage, self).listdir(path)
 
         for x in dirs:
             if x.endswith('.d'):
@@ -22,7 +23,7 @@ class MyStorage(FileSystemStorage):
         pathd = '%s.d' % self.path(path)
 
         if not os.path.isdir(pathd):
-            return super(MyStorage, self)._open(path, mode)
+            return super(DotdStorage, self)._open(path, mode)
 
         filenames = []
         for root, _, files in os.walk(pathd, followlinks=True):
@@ -43,7 +44,7 @@ class DotDFinder(FileSystemFinder):
         super(DotDFinder, self).__init__(*args, **kwargs)
 
         for root, existing_storage in self.storages.items():
-            filesystem_storage = MyStorage(location=root)
+            filesystem_storage = DotdStorage(location=root)
             filesystem_storage.prefix = existing_storage.prefix
             self.storages[root] = filesystem_storage
 
