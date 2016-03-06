@@ -17,6 +17,6 @@ setup(
     packages=find_packages(),
     install_requires=(
         'Django>=1.9.0',
-        'monkeypatch',
+        'monkeypatch==0.1rc3',
     ),
 )
