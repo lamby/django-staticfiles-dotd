@@ -7,7 +7,4 @@ django-staticfiles-dotd
          'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     )
 
-
-Doesn't work with ``collectstatic [..] --link``.
-
 You probably want to use ``django-pipeline`` over this.
