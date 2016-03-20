@@ -3,7 +3,6 @@ import os
 from django.utils._os import safe_join
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
-from django.contrib.staticfiles import views
 from django.contrib.staticfiles.finders import FileSystemFinder
 
 from . import app_settings
