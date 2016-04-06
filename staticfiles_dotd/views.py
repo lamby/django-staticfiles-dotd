@@ -9,6 +9,7 @@ from django.views import static
 from django.utils.http import http_date
 from django.views.static import was_modified_since
 from django.contrib.staticfiles import finders
+from django.utils.encoding import force_bytes
 from django.utils.six.moves.urllib.parse import unquote
 
 from . import app_settings
@@ -64,6 +65,9 @@ def served(request, absolute_path):
 
     fn = get_dotted_path(app_settings.RENDER_FN)
     contents = ''.join(fn(x) for x in sorted(filenames))
+
+    # Ensure bytes otherwise our len(contents) can be short!
+    contents = force_bytes(contents)
 
     response = HttpResponse(contents, content_type=mimetype)
     response['Last-Modified'] = http_date(latest)
