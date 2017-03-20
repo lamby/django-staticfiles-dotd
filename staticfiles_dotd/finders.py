@@ -21,9 +21,7 @@ class DotdStorage(FileSystemStorage):
         suffix = app_settings.DIRECTORY_SUFFIX
 
         # Add matching directories as filenames...
-        filenames.extend(
-            x[:-len(suffix)] for x in dirs if x.endswith(suffix)
-        )
+        filenames.extend(x[:-len(suffix)] for x in dirs if x.endswith(suffix))
 
         # .. and only then filter them out from directories.
         dirs = [x for x in dirs if not x.endswith(suffix)]
