@@ -35,7 +35,7 @@ def serve(request, path, insecure=False, **kwargs):
         raise Http404
     normalized_path = posixpath.normpath(unquote(path)).lstrip('/')
     absolute_path = finders.find(normalized_path)
-    if os.path.isdir('%s.d' % absolute_path):
+    if os.path.isdir('%s%s' % (absolute_path, app_settings.DIRECTORY_SUFFIX)):
         return served(request, absolute_path)
     if not absolute_path:
         if path.endswith('/') or path == '':
@@ -45,10 +45,11 @@ def serve(request, path, insecure=False, **kwargs):
     return static.serve(request, path, document_root=document_root, **kwargs)
 
 def served(request, absolute_path):
+    top = '%s%s' % (absolute_path, app_settings.DIRECTORY_SUFFIX)
     latest = -1
     filenames = []
 
-    for root, _, files in os.walk('%s.d' % absolute_path, followlinks=True):
+    for root, _, files in os.walk(top, followlinks=True):
         for filename in [os.path.join(root, x) for x in files]:
             if filename.endswith('~'):
                 continue

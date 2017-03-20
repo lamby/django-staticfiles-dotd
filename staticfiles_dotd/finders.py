@@ -18,18 +18,17 @@ class DotdStorage(FileSystemStorage):
     def listdir(self, path):
         dirs, filenames = super(DotdStorage, self).listdir(path)
 
-        # Create a new list to prevent directories being skipped over due to
-        # calling list.remove during iteration.
-        new_dirs = []
-        for x in dirs:
-            if x.endswith('.d'):
-                # Treat .d directory as a filename
-                filenames.append(x[:-2])
-            else:
-                # Implicitly remove .d directory from `dirs`.
-                new_dirs.append(x)
+        suffix = app_settings.DIRECTORY_SUFFIX
 
-        return new_dirs, filenames
+        # Add matching directories as filenames...
+        filenames.extend(
+            x[:-len(suffix)] for x in dirs if x.endswith(suffix)
+        )
+
+        # .. and only then filter them out from directories.
+        dirs = [x for x in dirs if not x.endswith(suffix)]
+
+        return dirs, filenames
 
     def _open(self, path, mode):
         pathd = '%s.d' % self.path(path)
