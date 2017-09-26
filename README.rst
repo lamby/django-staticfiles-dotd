@@ -1,6 +1,7 @@
 django-staticfiles-dotd
 =======================
 
+    INSTALLED_APPS += ['staticfiles_dotd']
 
     STATICFILES_FINDERS = (
         'staticfiles_dotd.finders.DotDFinder',
