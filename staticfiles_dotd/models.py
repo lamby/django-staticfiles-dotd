@@ -1,5 +1,4 @@
-import monkeypatch
-
+from .utils import monkeypatch
 from .views import serve
 
-monkeypatch.patch(serve, 'django.contrib.staticfiles.views', 'serve')
+monkeypatch(serve, 'django.contrib.staticfiles.views', 'serve')
