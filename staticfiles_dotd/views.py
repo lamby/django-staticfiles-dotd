@@ -65,7 +65,7 @@ def served(request, absolute_path):
         return HttpResponseNotModified(content_type=mimetype)
 
     fn = get_dotted_path(app_settings.RENDER_FN)
-    contents = ''.join(fn(x) for x in sorted(filenames))
+    contents = b''.join(fn(x) for x in sorted(filenames))
 
     # Ensure bytes otherwise our len(contents) can be short!
     contents = force_bytes(contents)

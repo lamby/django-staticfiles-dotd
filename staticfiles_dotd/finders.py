@@ -41,7 +41,7 @@ class DotdStorage(FileSystemStorage):
                     continue
                 filenames.append(filename)
 
-        return ContentFile(''.join(self.render(x) for x in sorted(filenames)))
+        return ContentFile(b''.join(self.render(x) for x in sorted(filenames)))
 
 class DotDFinder(FileSystemFinder):
     def __init__(self, *args, **kwargs):

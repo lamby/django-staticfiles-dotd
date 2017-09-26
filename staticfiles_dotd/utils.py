@@ -7,5 +7,5 @@ def get_dotted_path(val):
 
 def render(filename):
     # A default render method
-    with open(filename) as f:
+    with open(filename, 'rb') as f:
         return f.read()
