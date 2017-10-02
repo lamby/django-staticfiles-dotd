@@ -6,7 +6,7 @@ setup(
     name='django-staticfiles-dotd',
 
     url="https://chris-lamb.co.uk/projects/django-staticfiles-dotd",
-    version='1.4.0',
+    version='2.0.0',
     description="Django staticfiles adaptor to concatentate .d-style"
         " directories",
 
