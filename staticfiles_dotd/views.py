@@ -4,7 +4,8 @@ import mimetypes
 import posixpath
 
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseNotModified
+from django.http import Http404, HttpResponse, FileResponse, \
+    HttpResponseNotModified
 from django.views import static
 from django.utils.http import http_date
 from django.views.static import was_modified_since
@@ -42,7 +43,19 @@ def serve(request, path, insecure=False, **kwargs):
             raise Http404("Directory indexes are not allowed here.")
         raise Http404("'%s' could not be found" % path)
     document_root, path = os.path.split(absolute_path)
-    return static.serve(request, path, document_root=document_root, **kwargs)
+    response = static.serve(
+        request,
+        path,
+        document_root=document_root,
+        **kwargs
+    )
+
+    if isinstance(response, FileResponse):
+        contents = render(absolute_path)
+        response.streaming_content = [contents]
+        response['Content-Length'] = len(contents)
+
+    return response
 
 
 def served(request, absolute_path):

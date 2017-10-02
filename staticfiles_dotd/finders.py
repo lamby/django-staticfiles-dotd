@@ -30,7 +30,7 @@ class DotdStorage(FileSystemStorage):
         pathd = '%s.d' % self.path(path)
 
         if not os.path.isdir(pathd):
-            return super(DotdStorage, self)._open(path, mode)
+            return ContentFile(render(self.path(path)))
 
         filenames = []
         for root, _, files in os.walk(pathd, followlinks=True):
