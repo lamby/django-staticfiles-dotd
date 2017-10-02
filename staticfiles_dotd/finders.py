@@ -3,17 +3,15 @@ import os
 from django.utils._os import safe_join
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
-from django.utils.module_loading import import_string
 from django.contrib.staticfiles.finders import FileSystemFinder
 
 from . import app_settings
+from .utils import render
 
 
 class DotdStorage(FileSystemStorage):
     def __init__(self, *args, **kwargs):
         super(DotdStorage, self).__init__(*args, **kwargs)
-
-        self.render = import_string(app_settings.RENDER_FN)
 
     def listdir(self, path):
         dirs, filenames = super(DotdStorage, self).listdir(path)
@@ -41,7 +39,7 @@ class DotdStorage(FileSystemStorage):
                     continue
                 filenames.append(filename)
 
-        return ContentFile(b''.join(self.render(x) for x in sorted(filenames)))
+        return ContentFile(b''.join(render(x) for x in sorted(filenames)))
 
 class DotDFinder(FileSystemFinder):
     def __init__(self, *args, **kwargs):

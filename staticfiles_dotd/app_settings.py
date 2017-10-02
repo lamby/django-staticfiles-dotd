@@ -1,10 +1,8 @@
 from django.conf import settings
 
-RENDER_FN = getattr(
-    settings,
-    'STATICFILES_DOTD_RENDER_FN',
-    'staticfiles_dotd.utils.render',
-)
+RENDER_PIPELINE = getattr(settings, 'STATICFILES_DOTD_RENDER_PIPELINE', (
+    'staticfiles_dotd.pipeline.read_file',
+))
 
 DIRECTORY_SUFFIX = getattr(
     settings,

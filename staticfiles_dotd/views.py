@@ -10,10 +10,10 @@ from django.utils.http import http_date
 from django.views.static import was_modified_since
 from django.contrib.staticfiles import finders
 from django.utils.encoding import force_bytes
-from django.utils.module_loading import import_string
 from django.utils.six.moves.urllib.parse import unquote
 
 from . import app_settings
+from .utils import render
 
 
 def serve(request, path, insecure=False, **kwargs):
@@ -64,8 +64,7 @@ def served(request, absolute_path):
     ):
         return HttpResponseNotModified(content_type=mimetype)
 
-    fn = import_string(app_settings.RENDER_FN)
-    contents = b''.join(fn(x) for x in sorted(filenames))
+    contents = b''.join(render(x) for x in sorted(filenames))
 
     # Ensure bytes otherwise our len(contents) can be short!
     contents = force_bytes(contents)

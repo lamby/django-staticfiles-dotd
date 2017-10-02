@@ -1,11 +1,18 @@
 import sys
 import functools
 
+from django.utils.module_loading import import_string
+
+from . import app_settings
+
 
 def render(filename):
-    # A default render method
-    with open(filename, 'rb') as f:
-        return f.read()
+    result = b''
+
+    for x in app_settings.RENDER_PIPELINE:
+        result = import_string(x)(filename, result)
+
+    return result
 
 
 def monkeypatch(new, modname, target):
