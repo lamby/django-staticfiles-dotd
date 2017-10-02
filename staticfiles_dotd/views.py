@@ -35,6 +35,10 @@ def serve(request, path, insecure=False, **kwargs):
     if not settings.DEBUG and not insecure:
         raise Http404
     normalized_path = posixpath.normpath(unquote(path)).lstrip('/')
+    if '{}/'.format(app_settings.DIRECTORY_SUFFIX) \
+            in '{}/'.format(normalized_path):
+        raise Http404("Refusing access to nested '{}' as it would not be "
+                      "accessible in production".format(path))
     absolute_path = finders.find(normalized_path)
     if os.path.isdir('%s%s' % (absolute_path, app_settings.DIRECTORY_SUFFIX)):
         return served(request, absolute_path)
