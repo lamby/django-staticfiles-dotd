@@ -7,7 +7,8 @@ from . import app_settings
 
 
 def render(filename):
-    result = b''
+    with open(filename, 'rb') as f:
+        result = f.read()
 
     for x in app_settings.RENDER_PIPELINE:
         result = import_string(x)(filename, result)
