@@ -44,6 +44,7 @@ def serve(request, path, insecure=False, **kwargs):
     document_root, path = os.path.split(absolute_path)
     return static.serve(request, path, document_root=document_root, **kwargs)
 
+
 def served(request, absolute_path):
     top = '%s%s' % (absolute_path, app_settings.DIRECTORY_SUFFIX)
     latest = -1
@@ -56,7 +57,8 @@ def served(request, absolute_path):
             filenames.append(filename)
             latest = max(latest, os.stat(filename)[stat.ST_MTIME])
 
-    mimetype = mimetypes.guess_type(absolute_path)[0] or 'application/octet-stream'
+    mimetype = mimetypes.guess_type(absolute_path)[0] \
+        or 'application/octet-stream'
 
     if not was_modified_since(
         request.META.get('HTTP_IF_MODIFIED_SINCE'),
