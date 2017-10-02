@@ -3,17 +3,17 @@ import os
 from django.utils._os import safe_join
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.utils.module_loading import import_string
 from django.contrib.staticfiles.finders import FileSystemFinder
 
 from . import app_settings
-from .utils import get_dotted_path
 
 
 class DotdStorage(FileSystemStorage):
     def __init__(self, *args, **kwargs):
         super(DotdStorage, self).__init__(*args, **kwargs)
 
-        self.render = get_dotted_path(app_settings.RENDER_FN)
+        self.render = import_string(app_settings.RENDER_FN)
 
     def listdir(self, path):
         dirs, filenames = super(DotdStorage, self).listdir(path)
