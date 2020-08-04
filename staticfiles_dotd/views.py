@@ -3,6 +3,8 @@ import stat
 import mimetypes
 import posixpath
 
+from urllib.parse import unquote
+
 from django.conf import settings
 from django.http import Http404, HttpResponse, FileResponse, \
     HttpResponseNotModified
@@ -11,7 +13,6 @@ from django.utils.http import http_date
 from django.views.static import was_modified_since
 from django.contrib.staticfiles import finders
 from django.utils.encoding import force_bytes
-from django.utils.six.moves.urllib.parse import unquote
 
 from . import app_settings
 from .utils import render
